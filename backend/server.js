@@ -6,6 +6,6 @@ const server = app.listen(PORT, () => {
     console.log(`Server eCommerce start with ${PORT}`)
 })
 
-process.on('SIGINT', () => {
-    server.close(() => console.log(`Exit server eCommerce`))
-})
+// process.on('SIGINT', () => {
+//     server.close(() => console.log(`Exit server eCommerce`))
+// })

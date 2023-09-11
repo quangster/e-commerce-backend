@@ -10,6 +10,7 @@ app.use(helmet())
 app.use(compression()) // compress payload data
 
 // init database
+require('../src/dbs/init.mongodb')
 
 // init routes
 
