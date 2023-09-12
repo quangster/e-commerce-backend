@@ -2,7 +2,9 @@
 
 const mongoose = require('mongoose')
 const { countConnect } = require('../helpers/check.connect')
-const connectString = `mongodb://localhost:27017/shopDEV`
+const { HOST, PORT, NAME } = require('../configs/mongodb.config')
+
+const connectString = `mongodb://${HOST}:${PORT}/${NAME}`
 
 class Database {
 
@@ -12,7 +14,9 @@ class Database {
 
     // connect
     connect(type = 'mongodb') {
-        if (1) {
+        
+        // set debug mongo mode for dev env
+        if (process.env.NODE_ENV == 'dev') {
             mongoose.set('debug', true);
             mongoose.set('debug', { color: true });
         }
@@ -23,7 +27,7 @@ class Database {
             console.log(`Connected Mongodb Success`)
             countConnect()
         }).catch((err) => {
-            console.log(`Error connect Mongodb`)
+            console.log(`Error connect Mongodb`, err.message)
         })
     }
 
