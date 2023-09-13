@@ -25,7 +25,7 @@ class Database {
             maxPoolSize: 50,
         }).then( (_) => { 
             console.log(`Connected Mongodb Success`)
-            countConnect()
+            // countConnect()
         }).catch((err) => {
             console.log(`Error connect Mongodb`, err.message)
         })

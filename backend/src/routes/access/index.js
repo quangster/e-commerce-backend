@@ -2,9 +2,8 @@
 
 const router = require('express').Router()
 const AccessController = require('../../controllers/access.controller')
+const asyncHandler = require('../../utils/asyncHandler')
 
-// register
-router.post('/shop/register', AccessController.register)
-
+router.post('/shop/register', asyncHandler(AccessController.register))
 
 module.exports = router
