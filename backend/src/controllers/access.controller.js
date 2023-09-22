@@ -8,6 +8,16 @@ const AccessController = {
         new CREATED({
             message: "Register OK !!!",
             metadata: await AccessService.register(req.body),
+            options: {
+                limit: 10,
+            }
+        }).send(res);
+    },
+
+    login: async(req, res, next) => {
+        new SuccessResponse({
+            message: "Login OK !!!",
+            metadata: await AccessService.login(req.body),
         }).send(res);
     }
 }
