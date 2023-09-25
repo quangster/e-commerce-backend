@@ -19,6 +19,13 @@ const AccessController = {
             message: "Login OK !!!",
             metadata: await AccessService.login(req.body),
         }).send(res);
+    },
+
+    logout: async(req, res, next) => {
+        new SuccessResponse({
+            message: "Logout OK !!!",
+            metadata: await AccessService.logout(req.keyStore),
+        }).send(res);
     }
 }
 

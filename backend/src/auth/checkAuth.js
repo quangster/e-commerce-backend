@@ -1,7 +1,6 @@
 'use strict'
 
 const { findById } = require('../services/apiKey.service')
-const { BadRequestError, AuthFailureError } = require('../core/error.response')
 
 const HEADER = {
     API_KEY: 'x-api-key',

@@ -95,6 +95,14 @@ const AccessService = {
             }),
             tokens  
         }
+    },
+
+    logout: async(keyStore) => {
+        const delKey = await KeyTokenService.removeKeyById(keyStore._id)
+        if (!delKey) throw new BadRequestError('Error: Failed to delete key and token')
+        return {
+            _id: keyStore._id,
+        }
     }
 }
 
