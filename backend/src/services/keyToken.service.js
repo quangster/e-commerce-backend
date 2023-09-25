@@ -32,7 +32,7 @@ const KeyTokenService = {
     },
 
     findByUserId: async( userId ) => {
-        return await KeyTokenModel.findOne({user: new Types.ObjectId(userId)}).lean()
+        return await KeyTokenModel.findOne({user: new Types.ObjectId(userId)})
     },
 }
 
