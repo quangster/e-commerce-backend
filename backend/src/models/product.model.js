@@ -1,14 +1,15 @@
 'use strict'
 
 const { model, Schema } = require('mongoose')
-
-const DOCUMENT_NAME = "Products";
-const COLLECTION_NAME = "Products";
+const slugify = require('slugify')
+const DOCUMENT_NAME = "Products"
+const COLLECTION_NAME = "Products"
 
 const productSchema = new Schema({
     product_name: { type: Schema.Types.String, required: true},
     product_thumb: { type: Schema.Types.String, required: true},
     product_description: { type: Schema.Types.String },
+    product_slug: { type: Schema.Types.String },
     product_price: { type: Schema.Types.Number, required: true},
     product_quantity: { type: Schema.Types.Number, required: true},
     product_type: { 
@@ -17,7 +18,21 @@ const productSchema = new Schema({
         enum: ['Electronics', 'Clothing', 'Furniture']
     },
     product_shop: { type: Schema.Types.ObjectId, ref: 'Shops'},
-    product_attributes: { type: Schema.Types.Mixed, required: true }
+    product_attributes: { type: Schema.Types.Mixed, required: true },
+    // more 
+    product_ratingsAverage: {
+        type: Schema.Types.Number,
+        default: 4.5,
+        min: [1, 'Rating must be above 1.0'],
+        max: [5, 'Rating must be below 5.0'],
+        set: (val) => Math.round(val * 10) / 10
+    },
+    product_variations: {
+        type: Array,
+        default: [],
+    },
+    isDraft: { type: Boolean, default: true, index: true, select: false},
+    isPublished: { type: Boolean, default: false, index: true, select: false},
 }, {
     collection: COLLECTION_NAME,
     timestamps: true,
