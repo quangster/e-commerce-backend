@@ -6,7 +6,7 @@ const crypto = require('crypto')
 const KeyTokenService = require("./keyToken.service")
 const { createTokenPair } = require('../auth/authUtils')
 const { BadRequestError, AuthFailureError, ForbiddenError } = require('../core/error.response')
-const { getInfoData } = require('../utils/getInfoData')
+const { getInfoData } = require('../utils')
 const { findByEmail } = require("./shop.service")
 
 const RoleShop = {
