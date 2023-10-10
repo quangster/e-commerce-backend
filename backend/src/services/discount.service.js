@@ -11,7 +11,8 @@ const {
 } = require('../utils')
 const { 
     findAllDiscountCodesSelect, 
-    findAllDiscountCodesUnSelect 
+    findAllDiscountCodesUnSelect,
+    checkDiscountExists,
 } = require('../models/repositories/discount.repo')
 
 /*
@@ -25,6 +26,7 @@ const {
 */ 
 
 class DiscountService {
+
     static async createDiscountCode (payload) {
         const {
             code, start_date, end_date, is_active,
@@ -32,9 +34,9 @@ class DiscountService {
             type, value, max_value, max_uses, uses_count, max_uses_per_user, users_used
         } = payload
         // check
-        if (new Date() < new Date(start_date) || new Date() > new Date(end_date)) {
-            throw new BadRequestError('Discount code has expired')
-        }
+        // if (new Date() < new Date(start_date) || new Date() > new Date(end_date)) {
+        //     throw new BadRequestError('Discount code has expired')
+        // }
 
         if (new Date(start_date) >= new Date(end_date)) {
             throw new BadRequestError('Start date must be before end_date')
@@ -127,18 +129,107 @@ class DiscountService {
         Get All Discount code of Shop
     */
     static async getAllDiscountCodesByShop({limit, page, shopId}) {
-        const discounts = await findAllDiscountCodesUnSelect({
+        const discounts = await findAllDiscountCodesSelect({
             limit: +limit,
             page: +page,
             filter: {
                 discount_shopId: convertToObjectIdMongodb(shopId),
                 discount_is_activate: true,
             },
-            unSelect: ['__v', 'discount_shopId'],
+            select: ['discount_name', 'discount_code'],
             model: discountModel,
         })
         return discounts
     }
+
+    static async getDiscountAmount({codeId, userId, shopId, products}) {
+        const foundDiscount = await checkDiscountExists({
+            model: discountModel,
+            filter: {
+                discount_code: codeId,
+                discount_shopId: convertToObjectIdMongodb(shopId),
+            }
+        })
+
+        if (!foundDiscount) throw new NotFoundError('Discount not found!')
+        const {
+            discount_is_activate,
+            discount_max_uses,
+            discount_max_value,
+            discount_start_date,
+            discount_end_date,
+            discount_min_order_value,
+            discount_max_uses_per_user,
+            discount_users_used,
+            discount_type,
+            discount_value,
+        } = foundDiscount
+        if (!discount_is_activate) throw new BadRequestError('Discount code has expired!')
+        if (!discount_max_uses) throw new BadRequestError('Discount are out!')
+
+        // if (new Date() < new Date(discount_start_date || new Date() > new Date(discount_end_date))) {
+        //     throw new BadRequestError('Discount code has expired')
+        // }
+
+        // check min value order
+        let totalOrder = 0;
+        if (discount_min_order_value > 0) {
+            // get Total
+            totalOrder = products.reduce((acc, product) => {
+                return acc + product.price * product.quantity
+            }, 0)
+
+            if (totalOrder < discount_min_order_value) {
+                throw new BadRequestError(`Discount requires a minium order value of ${discount_min_order_value}!`)
+            }
+        }
+
+        if (discount_max_uses_per_user > 0) {
+            const userDiscount = discount_users_used.find(user => user.userId === userId)
+            if (userDiscount) {
+                //...
+            }
+        }
+
+        // check this discount is fixed_amount or percentage
+        const amount = discount_type === 'fixed_amount' ? discount_value : totalOrder * discount_value / 100
+
+        return {
+            totalOrder,
+            discount: amount,
+            totalPrice: totalOrder - amount,
+        }
+    }
+
+    static async deleteDiscountCode({shopId, code}) {
+        const deleted = await discountModel.findOneAndDelete({
+            discount_code: code,
+            discount_shopId: convertToObjectIdMongodb(shopId)
+        })
+        return deleted
+    }
+
+    static async cancelDiscountCode({codeId, shopId, userId}) {
+        const foundDiscount = await checkDiscountExists(
+            model=discountModel,
+            filter={
+                discount_code: codeId,
+                discount_shopId: convertToObjectIdMongodb(shopId),
+            }
+        )
+        if (!foundDiscount) throw new NotFoundError('Discount not found!')
+
+        const result = await discountModel.findByIdAndUpdate(foundDiscount._id, {
+            $pull: {
+                discount_users_used: userId,
+            },
+            $inc: {
+                discount_max_uses: 1,
+                discount_uses_count: -1
+            }
+        })
+        return result
+    }
 }
 
-module.exports = new DiscountService()
+module.exports = DiscountService
