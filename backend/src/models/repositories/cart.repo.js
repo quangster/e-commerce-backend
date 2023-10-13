@@ -1,9 +1,9 @@
 'use strict'
 
-const cartModel = require('../models/cart.model')
+const cartModel = require('../cart.model')
 
 const createUserCart = async({ userId, product }) => {
-    const query = { cart_userId: userId, cart_state: 'activate' }
+    const query = { cart_userId: userId, cart_state: 'active' }
     const updateOrInsert = {
         $addToSet: {
             cart_products: product

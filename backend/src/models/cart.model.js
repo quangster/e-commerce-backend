@@ -8,8 +8,8 @@ const COLLECTION_NAME = 'carts'
 const cartSchema = new Schema({
     cart_state: {
         type: String, required: true,
-        enum: ['activate', 'complete', 'failed', 'pending'],
-        default: 'activate',
+        enum: ['active', 'complete', 'failed', 'pending'],
+        default: 'active',
     },
     cart_products: {
         type: Array, required: true, default: [],
