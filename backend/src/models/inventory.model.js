@@ -19,5 +19,4 @@ const inventorySchema = new Schema({
 
 module.exports = {
     inventory: model(DOCUMENT_NAME, inventorySchema),
-    
 }

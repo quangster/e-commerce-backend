@@ -13,6 +13,8 @@ const {
 const {
     checkProductByServer,
 } = require('../models/repositories/product.repo')
+const { acquireLock, releaseLock } = require('./redis.service')
+const orderModel = require('../models/order.model')
 
 const CheckoutService = {
 
@@ -106,7 +108,87 @@ const CheckoutService = {
             shop_order_ids_new,
             checkout_order,
         }
-    }
+    },
+
+    order: async({
+        shop_order_ids,
+        cartId,
+        userId,
+        user_address = {},
+        user_payment = {}
+    }) => {
+        const {
+            shop_order_ids_new,
+            checkout_order
+        } = await CheckoutService.checkoutReview({
+            cartId,
+            userId,
+            shop_order_ids,
+        })
+
+        // check lai mot lan nua xem vuot ton kho hay khong
+        // get new array product
+        const products = shop_order_ids_new.flatMap( order => order.item_products)
+        console.log(`[1]::`, products)
+        const acquireProduct = []
+        for (let i = 0; i < products.length; i++) {
+            const { productId, quantity } = products[i];
+            const keyLock = await acquireLock(productId, quantity, cartId)
+            acquireProduct.push(keyLock ? true : false)
+            if (keyLock) {
+                await releaseLock(keyLock)
+            }
+        }
+
+        // check if co 1 san pham het hang trong kho
+        if (acquireProduct.includes(false)) {
+            throw new BadRequestError('Mot so san pham da duoc cap nhat, vui long quay lai gio hang de biet tham chi tiet...')
+        }
+
+        // TODO
+        const newOrder = await order.create({
+            order_userId: userId,
+            order_checkout: checkout_order,
+            order_shipping: user_address,
+            order_payment: user_payment,
+            order_products: shop_order_ids_new,
+        })
+
+        // neu insert success thi remove product co trong cart
+        if (newOrder) {
+
+        }
+
+        return new Order
+    },
+
+    /* 
+        1> Query Orders [User]
+    */
+    getOrdersByUser: async() => {
+
+    },
+
+    /* 
+        1> Query Order Using Id [User]
+    */
+    getOneOrderByUser: async() => {
+
+    },
+
+    /* 
+        1> Cancel Order [User]
+    */
+    cancelOrderByUser: async() => {
+
+    },
+
+    /* 
+        1> Update Order Status [Shop | Admin]
+    */
+    updateOrderStatusByShop: async() => {
+
+    },
 }
 
 module.exports = CheckoutService
