@@ -3,6 +3,9 @@
 const { permission, apiKey } = require('../auth/checkAuth');
 
 const router = require('express').Router()
+const {
+    pushToLogDiscord,
+} = require('../middlewares');
 
 router.get('/', (req, res, next) => {
     return res.status(200).json({
@@ -10,6 +13,7 @@ router.get('/', (req, res, next) => {
     })
 })
 
+router.use(pushToLogDiscord);
 router.use(apiKey);
 router.use(permission('0000'));
 
@@ -19,6 +23,5 @@ router.use('/v1/api/inventory', require('./inventory'));
 router.use('/v1/api/cart', require('./cart'));
 router.use('/v1/api/product', require('./product'));
 router.use('/v1/api', require('./access'));
-
 
 module.exports = router
