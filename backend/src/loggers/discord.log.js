@@ -14,8 +14,7 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`)
 })
 
-const token = 'MTE5MjQ1MDA0ODQ1MDEwMTMwOA.GUWttT.b0FS-wK7vAi0StbgZEo-FNWgpPtQmDkzW0Dr0E'
-client.login(token)
+client.login(process.env.DISCORD_BOT_TOKEN)
 
 client.on('messageCreate', msg => {
     if (msg.author.bot) return
