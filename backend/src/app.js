@@ -12,7 +12,13 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 // init database
-require('../src/dbs/init.mongodb')
+require('./dbs/init.mongodb');
+// require('./dbs/init.redis');
+
+// test pub sub service
+require('./tests/inventory.test')
+const productTest = require('./tests/product.test')
+productTest.purchaseProduct('product:001', 10);
 
 // init routes
 app.use('', require('./routes'))

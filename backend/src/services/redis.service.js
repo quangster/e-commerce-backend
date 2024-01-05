@@ -5,24 +5,24 @@ const { promisify } = require('util')
 const { reservationInventory } = require('../models/repositories/inventory.repo')
 const redisClient = redis.createClient()
 
-const pexpire = promisify(redisClient.pExpire).bind(redisClient)
-const setnxAsync = promisify(redisClient.pExpire).bind(redisClient)
+const pexpire = promisify(redisClient.expire).bind(redisClient)
+const setnxAsync = promisify(redisClient.expire).bind(redisClient)
 
 const acquireLock = async(productId, quantity, cartId) => {
     const key = `lock_v2023_${productId}`
-    const retruyTime = 10
+    const retryTime = 10
     const expireTime = 3000
 
-    for (let index = 0; index < retruyTime.length; i++) {
+    for (let index = 0; index < retryTime.length; i++) {
         // tao 1 key, thang nao nam giu duoc vao thanh toan
         const result = await setnxAsync(key, expireTime)
         console.log(`result::`, result)
         if (result === 1) {
             // thao tac voi inventory
-            const isReversation = await reservationInventory({
+            const isReservation = await reservationInventory({
                 productId, quantity, cartId
             })
-            if (isReversation.modifiedCount) {
+            if (isReservation.modifiedCount) {
                 await pexpire(key, expireTime)
                 return key
             }

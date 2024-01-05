@@ -9,7 +9,21 @@ services:
       - ./data/mongo:/data/db
     networks:
       - mongo_network
+
+  redis:
+    image: redis:7.0
+    container_name: redisdb
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    environment:
+      - REDIS_PASSWORD=password
+    networks:
+      - mongo_network
+  
 networks:
   mongo_network:
     name: mongo_network
     driver: bridge
+
