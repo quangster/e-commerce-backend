@@ -13,7 +13,7 @@ app.use(express.urlencoded({extended: true}))
 
 // init database
 require('./dbs/init.mongodb');
-// require('./dbs/init.redis');
+require('./dbs/init.redis');
 
 // test pub sub service
 require('./tests/inventory.test')
