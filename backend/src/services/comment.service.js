@@ -2,7 +2,7 @@
 
 const commentModel = require('../models/comment.model');
 const { convertToObjectIdMongodb } = require('../utils');
-const { NotFoundError } = require('../core/error.response')
+const { NotFoundError } = require('../core/error.response');
 const { findProduct } = require('../models/repositories/product.repo');
 
 /*
