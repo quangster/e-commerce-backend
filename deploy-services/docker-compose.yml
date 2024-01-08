@@ -45,6 +45,21 @@ services:
   #   networks:
   #     - eco_network
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./data/rabbitmq:/var/lib/rabbitmq
+      - ./logs/rabbitmq:/var/log/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=password
+    networks:
+      - eco_network
+
 networks:
   eco_network:
     name: eco_network
