@@ -1,3 +1,5 @@
 deploy-services/data
 backend/.env
 backend/node_modules
+message-queue/.env
+message-queue/node_modules

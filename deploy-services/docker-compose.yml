@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   mongo:
-    image: mongo
+    image: mongo:7.0
     container_name: mongodb
     ports:
       - "27017:27017"
@@ -52,8 +52,8 @@ services:
       - "5672:5672"
       - "15672:15672"
     volumes:
-      - ./data/rabbitmq:/var/lib/rabbitmq
-      - ./logs/rabbitmq:/var/log/rabbitmq
+      - ./data/rabbitmq:/var/lib/rabbitmq/
+      - ./logs/rabbitmq:/var/log/rabbitmq/
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=password
