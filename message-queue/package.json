@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "start": "node server.js"
+    "start": "node --watch --env-file=.env server.js"
   },
   "dependencies": {
     "amqplib": "^0.10.3",
