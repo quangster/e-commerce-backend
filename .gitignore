@@ -3,3 +3,5 @@ backend/.env
 backend/node_modules
 message-queue/.env
 message-queue/node_modules
+deploy-services/mysql/master/data
+deploy-services/mysql/slave/data

@@ -60,6 +60,32 @@ services:
     networks:
       - eco_network
 
+  mysql_master:
+    image: mysql:8.0
+    container_name: mysql_master
+    env_file:
+      - ./mysql/master/mysql_master.env
+    ports:
+      - "4406:3306"
+    volumes:
+      - ./mysql/master/data:/var/lib/mysql
+      - ./mysql/master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
+    networks:
+      - eco_network
+
+  mysql_slave:
+    image: mysql:8.0
+    container_name: mysql_slave
+    env_file:
+      - ./mysql/slave/mysql_slave.env
+    ports:
+      - "5506:3306"
+    volumes:
+      - ./mysql/slave/data:/var/lib/mysql
+      - ./mysql/slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
+    networks:
+      - eco_network
+
 networks:
   eco_network:
     name: eco_network
