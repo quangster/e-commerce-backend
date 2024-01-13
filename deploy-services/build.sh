@@ -1,8 +1,8 @@
 #!/bin/bash
 
-docker-compose down -v
-rm -rf ./master/data/*
-rm -rf ./slave/data/*
+docker-compose down
+rm -rf ./mysql/master/data
+rm -rf ./mysql/slave/data
 docker-compose build
 docker-compose up -d
 
