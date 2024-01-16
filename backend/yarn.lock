@@ -241,6 +241,14 @@
     fast-xml-parser "4.2.5"
     tslib "^2.5.0"
 
+"@aws-sdk/cloudfront-signer@^3.485.0":
+  version "3.485.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/cloudfront-signer/-/cloudfront-signer-3.485.0.tgz#7c8dd23f68a36609a9dcd0b88cd43104804c0a01"
+  integrity sha512-uPp0j1h6gKSGkAQAyewt7PNyLRzkNZJBqtCAmu15LSwaTpUj9i1bM752g4oBC/ZW7D9aaJkJxVADOhL1qDXknw==
+  dependencies:
+    "@smithy/url-parser" "^2.0.16"
+    tslib "^2.5.0"
+
 "@aws-sdk/core@3.490.0":
   version "3.490.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/core/-/core-3.490.0.tgz#387013cb6e4060b421c6b45bd33f419c5c8e4a76"
@@ -465,6 +473,20 @@
     "@smithy/util-middleware" "^2.0.9"
     tslib "^2.5.0"
 
+"@aws-sdk/s3-request-presigner@^3.490.0":
+  version "3.490.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/s3-request-presigner/-/s3-request-presigner-3.490.0.tgz#de5203f021e8f89463e0c68ea288dd7d9201ed93"
+  integrity sha512-ZHs+FlcTv9MKMM0b9svxxQio4FiRxDNstKYG8sbm9YEoahYV25h3K3butUiThaiOeYePOD7jHdbdXz4/XasxXg==
+  dependencies:
+    "@aws-sdk/signature-v4-multi-region" "3.489.0"
+    "@aws-sdk/types" "3.489.0"
+    "@aws-sdk/util-format-url" "3.489.0"
+    "@smithy/middleware-endpoint" "^2.3.0"
+    "@smithy/protocol-http" "^3.0.12"
+    "@smithy/smithy-client" "^2.2.1"
+    "@smithy/types" "^2.8.0"
+    tslib "^2.5.0"
+
 "@aws-sdk/signature-v4-multi-region@3.489.0":
   version "3.489.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/signature-v4-multi-region/-/signature-v4-multi-region-3.489.0.tgz#d36574d34bc084f29c19d3bc51acbd821767dda0"
@@ -543,6 +565,16 @@
     "@aws-sdk/types" "3.489.0"
     "@smithy/types" "^2.8.0"
     "@smithy/util-endpoints" "^1.0.8"
+    tslib "^2.5.0"
+
+"@aws-sdk/util-format-url@3.489.0":
+  version "3.489.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/util-format-url/-/util-format-url-3.489.0.tgz#c8f20a0cac55917bf08e32080906aa260d6c1422"
+  integrity sha512-yqIf9RMdOSxMUrv1BVDmrYp5kjLh4RxA17BTqzcQK8cXkRBqBP8ydbCQXENSv8LZSMH7AnrXNHBD1eiVuKRzZw==
+  dependencies:
+    "@aws-sdk/types" "3.489.0"
+    "@smithy/querystring-builder" "^2.0.16"
+    "@smithy/types" "^2.8.0"
     tslib "^2.5.0"
 
 "@aws-sdk/util-locate-window@^3.0.0":
@@ -1527,6 +1559,11 @@ discord.js@^14.14.1:
     tslib "2.6.2"
     undici "5.27.2"
     ws "8.14.2"
+
+dotenv@^16.3.1:
+  version "16.3.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.1.tgz#369034de7d7e5b120972693352a3bf112172cc3e"
+  integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
 
 ecdsa-sig-formatter@1.0.11:
   version "1.0.11"

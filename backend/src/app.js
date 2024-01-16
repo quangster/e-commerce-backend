@@ -3,6 +3,7 @@ const app = express()
 const { default: helmet } = require('helmet')
 const morgan = require('morgan')
 const compression = require('compression')
+require('dotenv').config()
 
 // init middlewares
 app.use(morgan('dev')) // other mode: compile, common, short, tiny

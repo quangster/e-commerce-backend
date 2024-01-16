@@ -1,8 +1,18 @@
 'use strict'
 
 const cloudinary = require('../configs/cloudinary.config')
+const { 
+    s3,
+    PutObjectCommand,
+    GetObjectCommand,
+    DeleteBucketCommand,
+} = require('../configs/aws.s3.config')
+const crypto = require('crypto')
+// const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
+const { getSignedUrl } = require('@aws-sdk/cloudfront-signer')
+const urlImagePublic = process.env.AWS_CLOUDFRONT_URL_PUBLIC
 
-
+const randomImageName = () => crypto.randomBytes(16).toString('hex')
 
 const UploadService = {
     // 1. upload from url image
@@ -64,7 +74,46 @@ const UploadService = {
         } catch (error) {
             console.error(`Error uploading image:: ${error}`)
         }
+    },
+
+    //// UPLOAD FILE USE S3CLIENT
+    uploadImageFromLocalS3: async({ file }) => {
+        try {
+            console.log(file)
+            
+            const imageName = randomImageName()
+            const command = new PutObjectCommand({
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: imageName || 'unknown',
+                Body: file.buffer,
+                ContentType: 'image/jpeg', // that is what your need!
+            })
+            const result = await s3.send(command)
+            // const singedUrl = new GetObjectCommand({
+            //     Bucket: process.env.AWS_BUCKET_NAME,
+            //     Key: imageName || 'unknown',
+            // })
+            // const url = await getSignedUrl(s3, singedUrl, { expiresIn: 3600 })
+
+            // have cloudfront url export
+            const signedUrl = getSignedUrl({
+                url: `${urlImagePublic}/${imageName}`,
+                keyPairId: process.env.AWS_CLOUDFRONT_PUBLIC_KEY_ID,
+                dateLessThan: new Date(Date.now() + Number(process.env.AWS_CLOUDFRONT_TIME_EXPIRE)),
+                privateKey: process.env.AWS_CLOUDFRONT_PRIVATE_KEY,
+            })
+            console.log(result)
+            console.log(signedUrl)
+            return {
+                result,
+                signedUrl
+            }
+        } catch (error) {
+            console.error(`Error uploading image:: ${error}`)
+        }
     }
+
+    //// END UPLOAD FILE USE S3CLIENT
 }
 
 module.exports = UploadService
